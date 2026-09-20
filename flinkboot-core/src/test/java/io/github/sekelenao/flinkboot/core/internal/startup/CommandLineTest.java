@@ -65,6 +65,30 @@ class CommandLineTest {
         }
 
         @Test
+        @DisplayName("Should reject null flag argument")
+        void shouldRejectNullFlagArgument() {
+            String[] args = {"--verbose", null};
+            var exception = assertThrows(CommandLineParsingException.class, () -> CommandLine.parse(args));
+            assertEquals("Argument at index 1 must not be null.", exception.getMessage());
+        }
+
+        @Test
+        @DisplayName("Should reject null option key")
+        void shouldRejectNullOptionKey() {
+            String[] args = {null, "value"};
+            var exception = assertThrows(CommandLineParsingException.class, () -> CommandLine.parse(args));
+            assertEquals("Argument at index 0 must not be null.", exception.getMessage());
+        }
+
+        @Test
+        @DisplayName("Should reject null option value")
+        void shouldRejectNullOptionValue() {
+            String[] args = {"-key", null};
+            var exception = assertThrows(CommandLineParsingException.class, () -> CommandLine.parse(args));
+            assertEquals("Argument at index 1 must not be null.", exception.getMessage());
+        }
+
+        @Test
         @DisplayName("Should parse multiple options and flags")
         void shouldParseMultipleOptionsAndFlags() {
             String[] args = {"-key1", "value1", "--verbose", "-key2", "value2", "--debug"};
